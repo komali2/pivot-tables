@@ -40,15 +40,15 @@ class Pivot extends React.Component {
         ctxMenu.style.left = "";
         ctxMenu.style.top = "";
     }
-    setIPTarget = () => {
-        console.log('set target', this.state.selected_ip);
+    setIPDestination = () => {
         this.hideContextMenu();
+        this.props.setIPDestination(this.state.selected_ip);
     }
     setIPSource = () => {
-        console.log('set source', this.state.selected_ip);
         this.hideContextMenu();
+        this.props.setIPSource(this.state.selected_ip);
     }
-    componentDidMount(){
+    componentDidMount = ()=>{
         const table = document.getElementsByClassName('pvtTable')[0];
         table.addEventListener('click', this.handleCellClicked);
     }
@@ -66,7 +66,7 @@ class Pivot extends React.Component {
                     {...this.props}
                     />
                 <menu id="ctxMenu">
-                    <menu title="See all bytes towards" onClick={this.setIPTarget}>See all bytes towards</menu>
+                    <menu title="See all bytes towards" onClick={this.setIPDestination}>See all bytes towards</menu>
                     <menu title="See all bytes from" onClick={this.setIPSource}>See all bytes from</menu>
                 </menu>
             </div>

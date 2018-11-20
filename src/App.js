@@ -20,7 +20,7 @@ class App extends Component {
     super(props);
     this.state = initial_state;
   }
-  handleChildChange = (config)=>{
+  handleChildChange = (config) => {
     var config_copy = JSON.parse(JSON.stringify(config));
     //delete some values which are functions
     delete config_copy["aggregators"];
@@ -30,7 +30,40 @@ class App extends Component {
     delete config_copy["localeStrings"];
     this.setState(config);
   }
-  resetState = ()=>{
+  setIPDestination = (ip) => {
+    let valueFilter = this.setNewValueFilter(ip, 'destination_ip');
+    let new_state = this.state;
+
+    // Unfortunately neecessary to clear out the stubbornly sticky PivotTable state
+    new_state.valueFilter = undefined;
+    this.setState(new_state);
+
+    // Now set actual new state
+    new_state.valueFilter = valueFilter;
+    this.setState(new_state)
+  }
+  setIPSource = (ip) => {
+    let valueFilter = this.setNewValueFilter(ip, 'source_ip');
+    let new_state = this.state;
+
+    // Unfortunately neecessary to clear out the stubbornly sticky PivotTable state
+    new_state.valueFilter = undefined;
+    this.setState(new_state);
+
+    new_state.valueFilter = valueFilter;
+    this.setState(new_state)
+  }
+  setNewValueFilter = (ip, type) => {
+    const out = {};
+    out[type] = {};
+    traffic_bytes.forEach((data)=>{
+      if (data[type] !== ip){
+        out[type][data[type]] = true;
+      }
+    });
+    return out;
+  }
+  resetState = () => {
     this.setState(initial_state);
   }
   
@@ -41,8 +74,10 @@ class App extends Component {
           Reset table to initial state.
         </button>
         <Pivot
-        handleStateChange={this.handleChildChange}
+          handleStateChange={this.handleChildChange}
           {...this.state}
+          setIPDestination={this.setIPDestination}
+          setIPSource={this.setIPSource}
         ></Pivot>
       </div>
     );
