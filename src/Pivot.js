@@ -9,6 +9,12 @@ import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 const PlotlyRenderers = createPlotlyRenderers(Plot);
 
 class Pivot extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            selected_ip: null,
+        };
+    }
     handleStateChange = (s)=>{
         this.props.handleStateChange(s);
     }
@@ -17,6 +23,7 @@ class Pivot extends React.Component {
         if(e.target.classList.contains('pvtColLabel') || e.target.classList.contains('pvtRowLabel')) {
             e.preventDefault();
             this.showContextMenu(e);
+            this.setState({selected_ip: e.target.innerHTML})
         } else {
             this.hideContextMenu();
         }
@@ -32,6 +39,14 @@ class Pivot extends React.Component {
         ctxMenu.style.display = "";
         ctxMenu.style.left = "";
         ctxMenu.style.top = "";
+    }
+    setIPTarget = () => {
+        console.log('set target', this.state.selected_ip);
+        this.hideContextMenu();
+    }
+    setIPSource = () => {
+        console.log('set source', this.state.selected_ip);
+        this.hideContextMenu();
     }
     componentDidMount(){
         const table = document.getElementsByClassName('pvtTable')[0];
@@ -51,8 +66,8 @@ class Pivot extends React.Component {
                     {...this.props}
                     />
                 <menu id="ctxMenu">
-                    <menu title="See all bytes towards">See all bytes towards</menu>
-                    <menu title="See all bytes from">See all bytes from</menu>
+                    <menu title="See all bytes towards" onClick={this.setIPTarget}>See all bytes towards</menu>
+                    <menu title="See all bytes from" onClick={this.setIPSource}>See all bytes from</menu>
                 </menu>
             </div>
         );
