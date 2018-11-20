@@ -24,6 +24,7 @@ class Pivot extends React.Component {
                 data={data}
                 onChange={s => this.setState(s)}
                 renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
+                hiddenFromDragDrop={['sum_bytes']}
                 {...this.state}
             />
         );
