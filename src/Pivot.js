@@ -8,13 +8,30 @@ import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 // create Plotly renderers via dependency injection
 const PlotlyRenderers = createPlotlyRenderers(Plot);
 
-
 class Pivot extends React.Component {
     handleStateChange = (s)=>{
         this.props.handleStateChange(s);
     }
     handleCellClicked = (e)=>{
-        console.log(e.target.innerHTML);
+        // Only handle clicks on IP addresses in headers 
+        if(e.target.classList.contains('pvtColLabel') || e.target.classList.contains('pvtRowLabel')) {
+            e.preventDefault();
+            this.showContextMenu(e);
+        } else {
+            this.hideContextMenu();
+        }
+    }
+    showContextMenu(e){
+        const ctxMenu = document.getElementById("ctxMenu");
+        ctxMenu.style.display = "block";
+        ctxMenu.style.left = (e.pageX - 10) + "px";
+        ctxMenu.style.top = (e.pageY - 10) + "px";
+    }
+    hideContextMenu(){
+        const ctxMenu = document.getElementById("ctxMenu");
+        ctxMenu.style.display = "";
+        ctxMenu.style.left = "";
+        ctxMenu.style.top = "";
     }
     componentDidMount(){
         const table = document.getElementsByClassName('pvtTable')[0];
@@ -26,12 +43,18 @@ class Pivot extends React.Component {
     }
     render() {
         return (
-            <PivotTableUI
-                onChange={this.handleStateChange}
-                renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
-                hiddenFromDragDrop={['sum_bytes']}
-                {...this.props}
-            />
+            <div>
+                <PivotTableUI
+                    onChange={this.handleStateChange}
+                    renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
+                    hiddenFromDragDrop={['sum_bytes']}
+                    {...this.props}
+                    />
+                <menu id="ctxMenu">
+                    <menu title="See all bytes towards">See all bytes towards</menu>
+                    <menu title="See all bytes from">See all bytes from</menu>
+                </menu>
+            </div>
         );
     }
 }
