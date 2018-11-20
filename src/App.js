@@ -11,14 +11,17 @@ const initial_state = {
   aggregatorName: "Sum",
   colOrder: "value_z_to_a",
   rowOrder: "value_z_to_a",
-  valueFilter: undefined,
+  valueFilter: {
+    destination_ip: {},
+    source_ip: {},
+  },
   data: traffic_bytes,
 }
 
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = initial_state;
+    this.state = JSON.parse(JSON.stringify(initial_state));
   }
   handleChildChange = (config) => {
     var config_copy = JSON.parse(JSON.stringify(config));
@@ -64,7 +67,7 @@ class App extends Component {
     return out;
   }
   resetState = () => {
-    this.setState(initial_state);
+    this.setState(JSON.parse(JSON.stringify(initial_state)));
   }
   
   render() {
