@@ -30,3 +30,7 @@
     transform: rotate(360deg);
   }
 }
+
+.pvtHorizList{
+  text-align: left;
+}
