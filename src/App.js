@@ -5,8 +5,8 @@ import traffic_bytes from './traffic_bytes';
 
 
 const initial_state = {
-  rows: ["All_Traffic.src"],
-  cols: ["All_Traffic.dest"],
+  rows: ["source_ip"],
+  cols: ["destination_ip"],
   vals: ["sum_bytes"],
   aggregatorName: "Sum",
   colOrder: "value_z_to_a",
