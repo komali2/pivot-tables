@@ -61,7 +61,7 @@ class Pivot extends React.Component {
             <div>
                 <PivotTableUI
                     onChange={this.handleStateChange}
-                    renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
+                    renderers={Object.assign({}, TableRenderers)}
                     hiddenFromDragDrop={['sum_bytes']}
                     {...this.props}
                     />
