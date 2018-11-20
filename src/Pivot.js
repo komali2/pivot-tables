@@ -13,6 +13,17 @@ class Pivot extends React.Component {
     handleStateChange = (s)=>{
         this.props.handleStateChange(s);
     }
+    handleCellClicked = (e)=>{
+        console.log(e.target.innerHTML);
+    }
+    componentDidMount(){
+        const table = document.getElementsByClassName('pvtTable')[0];
+        table.addEventListener('click', this.handleCellClicked);
+    }
+    componentWillUnmount(){
+        const table = document.getElementsByClassName('pvtTable')[0];
+        table.removeEventListener('click', this.handleCellClicked);
+    }
     render() {
         return (
             <PivotTableUI
