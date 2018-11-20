@@ -12,17 +12,22 @@ const PlotlyRenderers = createPlotlyRenderers(Plot);
 // see documentation for supported input formats
 const data = traffic_bytes;
 
+
+
 class Pivot extends React.Component {
     constructor(props) {
         super(props);
         this.state = props;
+    }
+    handleStateChange = (s)=>{
+        this.setState(s)
     }
 
     render() {
         return (
             <PivotTableUI
                 data={data}
-                onChange={s => this.setState(s)}
+                onChange={this.handleStateChange}
                 renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
                 hiddenFromDragDrop={['sum_bytes']}
                 {...this.state}
