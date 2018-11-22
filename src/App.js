@@ -22,6 +22,26 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = JSON.parse(JSON.stringify(initial_state));
+
+  }
+  componentDidMount = () => {
+    this.parseUrl();
+    window.onpopstate = ()=>{
+      this.parseUrl(true);
+    };
+  }
+  parseUrl = (skip)=>{
+    // Doesn't work in internet explorer
+    const params = new URLSearchParams(document.location.search.substring(1));
+    const source_filter = params.get('source_filter');
+    const destination_filter = params.get('destination_filter');
+    if(source_filter){
+      this.setIPSource(source_filter, skip);
+    } else if (destination_filter) {
+      this.setIPDestination(destination_filter, skip);
+    } else {
+      this.resetState(null, skip);
+    }
   }
   handleChildChange = (config) => {
     var config_copy = JSON.parse(JSON.stringify(config));
@@ -33,26 +53,28 @@ class App extends Component {
     delete config_copy["localeStrings"];
     this.setState(config);
   }
-  setIPDestination = (ip) => {
-    let valueFilter = this.setNewValueFilter(ip, 'destination_ip');
-    let new_state = this.state;
+  setIPDestination = (ip, skip) => {
+    const valueFilter = this.setNewValueFilter(ip, 'destination_ip');
+    const new_state = this.state;
 
     // Unfortunately neecessary to clear out the stubbornly sticky PivotTable state
     new_state.valueFilter = undefined;
     this.setState(new_state);
 
     // Now set actual new state
+    if (!skip) window.history.pushState(valueFilter, '', `?destination_filter=${ip}`);
     new_state.valueFilter = valueFilter;
     this.setState(new_state)
   }
-  setIPSource = (ip) => {
-    let valueFilter = this.setNewValueFilter(ip, 'source_ip');
-    let new_state = this.state;
+  setIPSource = (ip, skip) => {
+    const valueFilter = this.setNewValueFilter(ip, 'source_ip');
+    const new_state = this.state;
 
     // Unfortunately neecessary to clear out the stubbornly sticky PivotTable state
     new_state.valueFilter = undefined;
     this.setState(new_state);
 
+    if (!skip) window.history.pushState(valueFilter, '', `?source_filter=${ip}`);
     new_state.valueFilter = valueFilter;
     this.setState(new_state)
   }
@@ -66,8 +88,10 @@ class App extends Component {
     });
     return out;
   }
-  resetState = () => {
+  resetState = (e, skip) => {
+    // Little trick to ensure the object wasn't passed by reference
     this.setState(JSON.parse(JSON.stringify(initial_state)));
+    if (!skip) window.history.pushState({}, '', '/');
   }
   
   render() {
