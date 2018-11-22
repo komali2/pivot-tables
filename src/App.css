@@ -30,6 +30,14 @@ menu > menu{
     position:relative;
 }
 
-.pvtDropdown{
+/* .pvtDropdown{
   display: none !important;
+} */
+
+.header{
+  display: flex;
+  justify-content: space-between;
+}
+.header span {
+  font-weight: bold;
 }

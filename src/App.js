@@ -22,7 +22,6 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = JSON.parse(JSON.stringify(initial_state));
-
   }
   componentDidMount = () => {
     this.parseUrl();
@@ -97,9 +96,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <div className="header">
         <button onClick={this.resetState}>
           Reset table to initial state.
         </button>
+        <span>Pivot Table</span>
+        <a href="http://www.calebjay.com/pivot-table.html">Project Description</a>
+      </div>
         <Pivot
           handleStateChange={this.handleChildChange}
           {...this.state}
